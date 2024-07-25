@@ -1,29 +1,30 @@
+import level_1_search
 import ui
 
 # Input
 def read_input(file_path):
   with open(file_path) as file:
     lines = [line.rstrip() for line in file]
-  status = lines[0].split(' ')
+  status = [int(n) for n in lines[0].split(' ')]
   map = [[w for w in line.split(' ')] for line in lines[1:]]
   return *status, map
   
 # Levels
-def level_4():
-  _, _, _, _, map = read_input('input_level_4.txt')
-  
-  # TODO: solve problem
-  solution = [
-    [(1,1), (2,1), (3,1), (4,1), (5,1), (6,1), (6,2), (6,3), (5,3), (5,4), (5,5), (6,5), (7,5), (7,6), (7,7), (7,8)],
-    [(2,5), (3,5), (4,5), (5,5), (5,4), (5,3), (6,3), (7,3), (7,2), (6,2), (6,1), (6,0), (7,0), (8,0), (9,0)],
-    [(8,5), (7,5), (6,5), (6,5), (6,5), (6,5), (5,5), (4,5), (4,6)]
-  ]
-  
-  # Display
-  ui.ui("Level 4", map, solution)
+def level_1():
+  w, h, map = read_input('input_level_1.txt')
+  bfs_solution = level_1_search.breath_first_search(w, h, map)
+  ui.ui("Level 1 - Breath-First Search", map, [bfs_solution])
+  dfs_solution = level_1_search.depth_first_search(w, h, map)
+  ui.ui("Level 1 - Depth-First Search", map, [dfs_solution])
+  ucs_solution = level_1_search.uniform_cost_search(w, h, map)
+  ui.ui("Level 1 - Uniform-cost Search", map, [ucs_solution])
+  gbfs_solution = level_1_search.greedy_best_first_search(w, h, map)
+  ui.ui("Level 1 - Greedy Best-first Search", map, [gbfs_solution])
+  as_solution = level_1_search.a_start_search(w, h, map)
+  ui.ui("Level 1 - A* Search", map, [as_solution])
 
 def main():
-  level_4()
+  level_1()
 
 if __name__ == '__main__':
   main()

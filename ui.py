@@ -16,7 +16,6 @@ COLORS = {
   **dict.fromkeys(['S7', 'G7'], (139, 92, 246)), # Violet
   **dict.fromkeys(['S8', 'G8'], (168, 85, 247)), # Purple
   **dict.fromkeys(['S9', 'G9'], (236, 72, 153)), # Pink
-  **dict.fromkeys([f'F{i}' for i in range(10)], (236, 72, 153)), # Pink
   'F': (244, 63, 94), # Rose
 }
 
