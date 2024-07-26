@@ -67,13 +67,10 @@ def ui(caption, map, solution):
     if event.type == pygame.KEYDOWN: break
   
   # Draw paths
-  print('======================')
-  print(solution)
-  print('======================')
   agent_num = len(solution)
   steps = [step for step in itertools.chain(*itertools.zip_longest(*solution))]
   for i in range(len(steps) - agent_num): # Skip start and goal
-    if not i % agent_num: pygame.time.delay(1000)
+    if not i % agent_num: pygame.time.delay(200)
     draw_path(surface, steps[i], steps[i + agent_num], f'G{i % agent_num}')
     pygame.display.update()
     
