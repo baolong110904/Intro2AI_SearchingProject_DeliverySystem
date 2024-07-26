@@ -1,4 +1,5 @@
 import level_1_search
+import level_2_search
 import ui
 
 # Input
@@ -23,8 +24,30 @@ def level_1():
   as_solution = level_1_search.a_start_search(w, h, map)
   ui.ui("Level 1 - A* Search", map, [as_solution])
 
+def level_2():
+    _, _, t, _, map = read_input('input_level_2.txt')
+    t = int(t)
+
+    start, goal = None, None
+    for i in range(len(map)):
+        for j in range(len(map[0])):
+            if map[i][j].startswith('S0'):
+                start = (i, j)
+            elif map[i][j].startswith('G0'):
+                goal = (i, j)
+        if start != None and goal != None:
+            break
+    if start is None or goal is None:
+        print("Invalid map, no start or goal found.")
+        return
+    solutions = level_2_search.ucs_search_for_lv2(map, start, goal, t)
+    if solutions:
+        ui.ui("Level 2", map, [solutions[0]])
+    else:
+        print("No path found within the committed delivery time.")
 def main():
-  level_1()
+  # level_1()
+  level_2()
 
 if __name__ == '__main__':
   main()

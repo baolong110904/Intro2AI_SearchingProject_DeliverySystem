@@ -115,3 +115,4 @@ def a_start_search(w, h, map):
           cost[frontier.index(child)] = child_cost
           moves.append((node, child))
   return []
+

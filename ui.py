@@ -16,7 +16,7 @@ COLORS = {
   **dict.fromkeys(['S7', 'G7'], (139, 92, 246)), # Violet
   **dict.fromkeys(['S8', 'G8'], (168, 85, 247)), # Purple
   **dict.fromkeys(['S9', 'G9'], (236, 72, 153)), # Pink
-  'F': (244, 63, 94), # Rose
+  **dict.fromkeys([f'F{i}' for i in range(10)], (244, 63, 94)), # Rose
 }
 
 # UI
@@ -67,6 +67,9 @@ def ui(caption, map, solution):
     if event.type == pygame.KEYDOWN: break
   
   # Draw paths
+  print('======================')
+  print(solution)
+  print('======================')
   agent_num = len(solution)
   steps = [step for step in itertools.chain(*itertools.zip_longest(*solution))]
   for i in range(len(steps) - agent_num): # Skip start and goal
