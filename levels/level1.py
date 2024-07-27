@@ -1,3 +1,5 @@
+from main import read_input
+
 def read_map(w, h, map):
   start = [(i, j) for i in range(w) for j in range(h) if map[i][j] == 'S'][0]
   goal = [(i, j) for i in range(w) for j in range(h) if map[i][j] == 'G'][0]
@@ -116,3 +118,17 @@ def a_start_search(w, h, map):
           moves.append((node, child))
   return []
 
+def level_1(file_path, algorithm):
+    n, m, t, f, map_data = read_input(file_path)
+    
+    if algorithm == 0:  # Breadth-First Search
+        solution = breath_first_search(m, n, map_data)
+    elif algorithm == 1:  # Depth-First Search
+        solution = depth_first_search(m, n, map_data)
+    elif algorithm == 2:  # Uniform-Cost Search
+        solution = uniform_cost_search(m, n, map_data)
+    elif algorithm == 3:  # Greedy Best First Search
+        solution = greedy_best_first_search(m, n, map_data)
+    elif algorithm == 4:  # A* Search
+        solution = a_start_search(m, n, map_data)
+    return map_data, [solution]

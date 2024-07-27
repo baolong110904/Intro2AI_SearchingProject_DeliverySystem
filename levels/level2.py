@@ -1,4 +1,5 @@
 import heapq
+import ui
 
 def read_input(file_path):
     with open(file_path) as file:
@@ -6,6 +7,7 @@ def read_input(file_path):
     status = lines[0].split(' ')
     map = [[w for w in line.split(' ')] for line in lines[1:]]
     return *status, map
+
 # UCS customized for lv2
 def ucs_search_for_lv2(map, start, goal, t):
     rows, cols = len(map), len(map[0])
@@ -34,3 +36,22 @@ def ucs_search_for_lv2(map, start, goal, t):
         return valid_paths
     else:
         return None
+
+def level_2(input_file):
+    _, _, t, _, map = read_input(input_file)
+    t = int(t)
+
+    start, goal = None, None
+    for i in range(len(map)):
+        for j in range(len(map[0])):
+            if map[i][j].startswith('S0'):
+                start = (i, j)
+            elif map[i][j].startswith('G0'):
+                goal = (i, j)
+        if start != None and goal != None:
+            break
+    if start is None or goal is None:
+        print("Invalid map, no start or goal found.")
+        return
+    solutions = ucs_search_for_lv2(map, start, goal, t)
+    return map, solutions

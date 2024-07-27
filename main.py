@@ -1,53 +1,35 @@
-import level_1_search
-import level_2_search
 import ui
+from levels import level1 
+from levels import level2 
+from levels import level3  
 
-# Input
 def read_input(file_path):
-  with open(file_path) as file:
-    lines = [line.rstrip() for line in file]
-  status = [int(n) for n in lines[0].split(' ')]
-  map = [[w for w in line.split(' ')] for line in lines[1:]]
-  return *status, map
-  
-# Levels
-def level_1():
-  w, h, map = read_input('input_level_1.txt')
-  bfs_solution = level_1_search.breath_first_search(w, h, map)
-  ui.ui("Level 1 - Breath-First Search", map, [bfs_solution])
-  dfs_solution = level_1_search.depth_first_search(w, h, map)
-  ui.ui("Level 1 - Depth-First Search", map, [dfs_solution])
-  ucs_solution = level_1_search.uniform_cost_search(w, h, map)
-  ui.ui("Level 1 - Uniform-cost Search", map, [ucs_solution])
-  gbfs_solution = level_1_search.greedy_best_first_search(w, h, map)
-  ui.ui("Level 1 - Greedy Best-first Search", map, [gbfs_solution])
-  as_solution = level_1_search.a_start_search(w, h, map)
-  ui.ui("Level 1 - A* Search", map, [as_solution])
+    with open(file_path) as file:
+        lines = [line.rstrip() for line in file]
+    n, m, t, f = map(int, lines[0].split(' '))
+    map_data = [line.split(' ') for line in lines[1:]]
+    return n, m, t, f, map_data
 
-def level_2():
-    _, _, t, _, map = read_input('input_level_2.txt')
-    t = int(t)
-
-    start, goal = None, None
-    for i in range(len(map)):
-        for j in range(len(map[0])):
-            if map[i][j].startswith('S0'):
-                start = (i, j)
-            elif map[i][j].startswith('G0'):
-                goal = (i, j)
-        if start != None and goal != None:
-            break
-    if start is None or goal is None:
-        print("Invalid map, no start or goal found.")
-        return
-    solutions = level_2_search.ucs_search_for_lv2(map, start, goal, t)
-    if solutions:
-        ui.ui("Level 2", map, [solutions[0]])
-    else:
-        print("No path found within the committed delivery time.")
 def main():
-  # level_1()
-  level_2()
+    selected_level = ui.level_selection()
+    if selected_level is None:
+        return
+
+    if selected_level == 1:
+        selected_algorithm = ui.algorithm_selection()
+        if selected_algorithm is None:
+            return
+        map_data, solution = level1.level_1('input/input_level_1.txt', selected_algorithm)
+        ui.ui(f"Level {selected_level}", map_data, solution)
+    elif selected_level == 2:
+        map_data, solution = level2.level_2('input/input_level_2.txt')
+        ui.ui(f"Level {selected_level}", map_data, solution)
+    elif selected_level == 3:
+        map_data, solution = level3.level_3('input/input_level3_1.txt')
+        ui.ui(f"Level {selected_level}", map_data, solution)
+    elif selected_level == 4:
+        # Implement Level 4
+        pass
 
 if __name__ == '__main__':
-  main()
+    main()
