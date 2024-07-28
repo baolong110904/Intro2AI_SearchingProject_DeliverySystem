@@ -34,7 +34,7 @@ def main():
     elif selected_level == 2:
         map_data, solution, time_taken, total_steps = level2.level_2(input_file)
         ui.ui(f"Level {selected_level}", map_data, solution, time_taken, total_steps)
-    if selected_level == 3:
+    elif selected_level == 3:
         map_data, solution, time_taken, total_steps = level3.level_3(input_file)
         ui.ui(f"Level {selected_level}", map_data, solution, time_taken, total_steps)
     elif selected_level == 4:
