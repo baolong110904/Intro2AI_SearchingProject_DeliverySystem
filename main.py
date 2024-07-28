@@ -1,7 +1,8 @@
 import ui
-from levels import level1 
-from levels import level2 
-from levels import level3  
+from levels import level1
+from levels import level2
+from levels import level3
+from levels import level4 
 
 def read_input(file_path):
     with open(file_path) as file:
@@ -34,11 +35,12 @@ def main():
         map_data, solution, time_taken, total_steps = level2.level_2(input_file)
         ui.ui(f"Level {selected_level}", map_data, solution, time_taken, total_steps)
     elif selected_level == 3:
-        map_data, solution, time_taken, total_steps = level3.level_3(input_file)
         ui.ui(f"Level {selected_level}", map_data, solution, time_taken, total_steps)
     elif selected_level == 4:
-        # Implement Level 4
-        pass
+        map_data, solution, time_taken, total_steps = level4.level_4(input_file)
+        ui.ui(f"Level {selected_level}", map_data, solution, time_taken, total_steps)
+    else:
+        print("Invalid level selected.")
 
 if __name__ == '__main__':
     main()

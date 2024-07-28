@@ -102,10 +102,14 @@ def ui(caption, map, solution, time_taken, total_steps):
     
     # Draw paths
     agent_num = len(solution)
-    steps = [step for step in itertools.chain(*itertools.zip_longest(*solution))]
-    for i in range(len(steps) - agent_num): # Skip start and goal
-        if not i % agent_num: pygame.time.delay(200)
-        draw_path(surface, steps[i], steps[i + agent_num], f'G{i % agent_num}')
+    max_steps = max(len(path) for path in solution)
+    for step in range(max_steps - 1):  # -1 to avoid going out of bounds
+        pygame.time.delay(500)
+        for i, path in enumerate(solution):
+            if step < len(path) - 1:  # Check if there's a next step for this agent
+                current_pos = path[step]
+                next_pos = path[step + 1]
+                draw_path(surface, current_pos, next_pos, f'G{i}')
         pygame.display.update()
         
     # Wait before quit

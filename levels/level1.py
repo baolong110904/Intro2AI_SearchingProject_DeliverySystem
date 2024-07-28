@@ -28,7 +28,7 @@ def breath_first_search(w, h, map):
         moves.append((node, child))
         reached.append(child)
         frontier.append(child)
-  return reached
+  return []
 
 def depth_first_search(w, h, map):
   start, goal = read_map(w, h, map)
@@ -90,7 +90,7 @@ def greedy_best_first_search(w, h, map):
         moves.append((node, child))
         reached.append(child)
         frontier.append(child)
-  return reached
+  return []
 
 def a_start_search(w, h, map):
   start, goal = read_map(w, h, map)
