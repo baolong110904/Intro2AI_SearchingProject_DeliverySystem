@@ -99,25 +99,27 @@ def ui(caption, map, solution, time_taken, total_steps):
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN: break
+
+    if solution:
+        # Draw paths
+        agent_num = len(solution)
+        max_steps = max(len(path) for path in solution)
+        for step in range(max_steps - 1):  # -1 to avoid going out of bounds
+            pygame.time.delay(500)
+            for i, path in enumerate(solution):
+                if step < len(path) - 1:  # Check if there's a next step for this agent
+                    current_pos = path[step]
+                    next_pos = path[step + 1]
+                    draw_path(surface, current_pos, next_pos, f'G{i}')
+            pygame.display.update()
     
-    # Draw paths
-    agent_num = len(solution)
-    max_steps = max(len(path) for path in solution)
-    for step in range(max_steps - 1):  # -1 to avoid going out of bounds
-        pygame.time.delay(500)
-        for i, path in enumerate(solution):
-            if step < len(path) - 1:  # Check if there's a next step for this agent
-                current_pos = path[step]
-                next_pos = path[step + 1]
-                draw_path(surface, current_pos, next_pos, f'G{i}')
-        pygame.display.update()
-        
     # Wait before quit
     pygame.event.clear()
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN: break
     pygame.quit()
+
 
 def draw_button(surface, text, position, size):
     button_rect = pygame.Rect(position, size)
