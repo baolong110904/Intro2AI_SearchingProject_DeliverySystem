@@ -53,39 +53,67 @@ def draw_path(surface, pos, next_pos, agent):
     else: path = pygame.Rect(50*col + (25-2), 50*row - (25-2), 4, 50)
   # Draw
   pygame.draw.rect(surface, COLORS[agent], path)
-  
-def ui(caption, map, solution):
-  # Init surface
-  pygame.init()
-  pygame.display.set_caption(caption)
-  surface = pygame.display.set_mode((50 * len(map), 50 * len(map[0])))
 
-  # Draw map
-  for row in range(len(map)):
-    for col in range(len(map[0])):
-      draw_cell(surface, map, (row, col))
-  pygame.display.update()
-  
-  # Wait before start
-  pygame.event.clear()
-  while True:
-    event = pygame.event.wait()
-    if event.type == pygame.KEYDOWN: break
-  
-  # Draw paths
-  agent_num = len(solution)
-  steps = [step for step in itertools.chain(*itertools.zip_longest(*solution))]
-  for i in range(len(steps) - agent_num): # Skip start and goal
-    if not i % agent_num: pygame.time.delay(200)
-    draw_path(surface, steps[i], steps[i + agent_num], f'G{i % agent_num}')
+def draw_info_panel(surface, time_taken, total_steps):
+    panel_width = 200
+    panel_height = surface.get_height()
+    panel_rect = pygame.Rect(surface.get_width() - panel_width, 0, panel_width, panel_height)
+    
+    # Draw panel background
+    pygame.draw.rect(surface, COLORS['n'], panel_rect)
+    pygame.draw.line(surface, COLORS['t'], (panel_rect.left, 0), (panel_rect.left, panel_height), 2)
+    
+    # Draw info text
+    font = pygame.font.SysFont('Arial', 24)
+    time_text = font.render(f"Time: {time_taken} minutes", True, COLORS['0'])
+    steps_text = font.render(f"Steps: {total_steps}", True, COLORS['0'])
+    
+    surface.blit(time_text, (panel_rect.left + 10, 20))
+    surface.blit(steps_text, (panel_rect.left + 10, 60))  
+
+def ui(caption, map, solution, time_taken, total_steps):
+    # Calculate new surface size
+    map_width = 50 * len(map[0])
+    map_height = 50 * len(map)
+    panel_width = 200
+    surface_width = map_width + panel_width
+    surface_height = max(map_height, 200)  # Ensure minimum height for info panel
+    
+    # Init surface
+    pygame.init()
+    pygame.display.set_caption(caption)
+    surface = pygame.display.set_mode((surface_width, surface_height))
+
+    # Draw map
+    for row in range(len(map)):
+        for col in range(len(map[0])):
+            draw_cell(surface, map, (row, col))
+    
+    # Draw info panel
+    draw_info_panel(surface, time_taken, total_steps)
+    
     pygame.display.update()
     
-  # Wait before quit
-  pygame.event.clear()
-  while True:
-    event = pygame.event.wait()
-    if event.type == pygame.KEYDOWN: break
-  pygame.quit()
+    # Wait before start
+    pygame.event.clear()
+    while True:
+        event = pygame.event.wait()
+        if event.type == pygame.KEYDOWN: break
+    
+    # Draw paths
+    agent_num = len(solution)
+    steps = [step for step in itertools.chain(*itertools.zip_longest(*solution))]
+    for i in range(len(steps) - agent_num): # Skip start and goal
+        if not i % agent_num: pygame.time.delay(200)
+        draw_path(surface, steps[i], steps[i + agent_num], f'G{i % agent_num}')
+        pygame.display.update()
+        
+    # Wait before quit
+    pygame.event.clear()
+    while True:
+        event = pygame.event.wait()
+        if event.type == pygame.KEYDOWN: break
+    pygame.quit()
 
 def draw_button(surface, text, position, size):
     button_rect = pygame.Rect(position, size)
@@ -265,6 +293,51 @@ def algorithm_selection():
                 for i, button in enumerate(buttons):
                     if button.collidepoint(event.pos):
                         return i
+
+        pygame.display.flip()
+        clock.tick(60)
+
+    pygame.quit()
+def input_selection():
+    pygame.init()
+    screen = pygame.display.set_mode((600, 850))
+    pygame.display.set_caption("Input Selection")
+    clock = pygame.time.Clock()
+    background = draw_background(screen)
+
+    inputs = [f"Input {i}" for i in range(1, 6)]
+
+    button_size = (300, 50)
+    button_font = pygame.font.Font(None, 36)
+    
+    buttons = [
+        draw_button(screen, inp, (150, 150 + i * 70), button_size, button_font)
+        for i, inp in enumerate(inputs)
+    ]
+
+    pygame.display.flip()
+
+    running = True
+    while running:
+        screen.blit(background, (0, 0))
+        
+        for i, inp in enumerate(inputs):
+            button = buttons[i]
+            draw_button(screen, inp, (150, 150 + i * 70), button_size, button_font)
+
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(buttons):
+            if button.collidepoint(mouse_pos):
+                draw_button(screen, inputs[i], (150, 150 + i * 70), button_size, button_font)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                return None
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for i, button in enumerate(buttons):
+                    if button.collidepoint(event.pos):
+                        return i + 1
 
         pygame.display.flip()
         clock.tick(60)

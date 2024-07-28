@@ -37,6 +37,15 @@ def ucs_search_for_lv2(map, start, goal, t):
     else:
         return None
 
+def calculate_time(map, path):
+    time = 0
+    for row, col in path[1:]:  # Skip the start position
+        cell = map[row][col]
+        time += 1  # Each step takes 1 minute
+        if cell[0].isdigit():
+            time += int(cell)  # Add toll booth time
+    return time
+
 def level_2(input_file):
     _, _, t, _, map = read_input(input_file)
     t = int(t)
@@ -53,5 +62,13 @@ def level_2(input_file):
     if start is None or goal is None:
         print("Invalid map, no start or goal found.")
         return
-    solutions = ucs_search_for_lv2(map, start, goal, t)
-    return map, solutions
+    solutions = ucs_search_for_lv2(map, start, goal, t)  
+    if solutions:
+        # Find the solution with the least time
+        best_solution = min(solutions, key=lambda path: calculate_time(map, path))
+        total_steps = len(best_solution) - 1  # Subtract 1 because the start position is included
+        time_taken = calculate_time(map, best_solution)
+    else:
+        total_steps = 0
+        time_taken = 0
+    return map, [best_solution] if solutions else [], time_taken, total_steps

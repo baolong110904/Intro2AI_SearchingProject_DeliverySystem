@@ -131,4 +131,12 @@ def level_1(file_path, algorithm):
         solution = greedy_best_first_search(m, n, map_data)
     elif algorithm == 4:  # A* Search
         solution = a_start_search(m, n, map_data)
-    return map_data, [solution]
+    
+    if solution:
+        total_steps = len(solution) - 1  # Subtract 1 because the start position is included
+        time_taken = total_steps  # Each step takes 1 minute
+    else:
+        total_steps = 0
+        time_taken = 0
+
+    return map_data, [solution], time_taken, total_steps
